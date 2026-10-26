@@ -1,5 +1,7 @@
 # Ada Poker
 
+[![Windows tests](https://github.com/DavyStultz/Ada-Poker/actions/workflows/tests.yml/badge.svg)](https://github.com/DavyStultz/Ada-Poker/actions/workflows/tests.yml)
+
 **Turn recorded poker sessions into a searchable local review workspace.**
 
 A Windows desktop prototype that captures a ClubGG table, reads saved footage
@@ -88,8 +90,8 @@ reliability has not been established.
 The prepared snapshot passed **204 unit tests**, **six search browser scenarios**,
 and **two combined-interface browser scenarios** locally on Windows. These checks
 exercise behavior with synthetic inputs; they do not measure real-world poker
-recognition accuracy. The included Windows CI workflow runs unit tests and
-compilation; its hosted result will be available after publication.
+recognition accuracy. The Windows CI workflow repeats unit tests and compilation
+on pushes and pull requests; the badge above links to the hosted results.
 
 ```powershell
 .\.venv\Scripts\python.exe -m unittest discover -s tests

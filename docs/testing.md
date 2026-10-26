@@ -25,7 +25,8 @@ Artifacts stay under ignored `.dev/` directories.
 
 The prepared snapshot passed 204 unit tests and all eight browser scenarios
 locally on Windows. The public CI workflow runs the unit suite and compilation
-on Windows with Python 3.12. Hosted CI has not run before initial publication.
+on Windows with Python 3.12. [Hosted workflow runs](https://github.com/DavyStultz/Ada-Poker/actions/workflows/tests.yml)
+show the results for each published commit.
 
 ## Desktop integration checks
 
