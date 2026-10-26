@@ -12,7 +12,7 @@ import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-import imageio_ffmpeg
+from ada_poker.media import get_ffmpeg
 from ada_poker import windows
 from ada_poker.recorder import CaptureRegion, Recorder, RecordingOptions
 from ada_poker.verify import verify_session
@@ -29,7 +29,7 @@ def main():
     monitor = next((m for m in displays if not m.primary), displays[0])
     # Odd dimensions exercise lossless one-pixel padding.
     region = CaptureRegion(monitor.x, monitor.y, monitor.width-1, monitor.height-1)
-    encoder = imageio_ffmpeg.get_ffmpeg_exe()
+    encoder = get_ffmpeg()
     recorder = Recorder(encoder, region, args.output.resolve(),
                         RecordingOptions(duration_seconds=args.seconds, segment_seconds=4))
     session = recorder.start()

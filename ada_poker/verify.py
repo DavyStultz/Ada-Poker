@@ -11,6 +11,7 @@ import json
 import math
 from pathlib import Path
 import subprocess
+from .media import get_ffmpeg, recording_input_options
 
 
 def read_segments(session_dir: Path) -> list[dict]:
@@ -51,7 +52,7 @@ def verify_session(session_dir: Path, ffmpeg_path: str) -> dict:
     for record in records:
         # File data is untrusted input; no shell or external URL protocols.
         result = subprocess.run(
-            [ffmpeg_path, "-hide_banner", "-v", "error", "-xerror", "-protocol_whitelist", "file,pipe",
+            [ffmpeg_path, "-hide_banner", "-nostdin", "-v", "error", "-xerror", *recording_input_options(),
              "-i", str(record["path"]), "-map", "0:v:0", "-progress", "pipe:1", "-f", "null", "-"],
             capture_output=True, text=True, timeout=max(60, (record["end"] - record["start"]) * 2),
             creationflags=flags,
@@ -73,10 +74,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("session", type=Path)
     args = parser.parse_args()
-    import imageio_ffmpeg
     try:
-        print(json.dumps(verify_session(args.session, imageio_ffmpeg.get_ffmpeg_exe()), indent=2))
-    except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
+        print(json.dumps(verify_session(args.session, get_ffmpeg()), indent=2))
+    except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as exc:
         parser.exit(1, f"Verification failed: {exc}\n")
 
 

@@ -1,10 +1,12 @@
 # Testing and validation
 
-Run from the repository root after installing the pinned dependency:
+Run from the repository root after installing the verified native runtime:
 
 ```powershell
 .\.venv\Scripts\python.exe -m unittest discover -s tests
 .\.venv\Scripts\python.exe -m compileall -q ada_poker tests scripts
+.\.venv\Scripts\python.exe scripts/check_media_security.py
+.\.venv\Scripts\python.exe scripts/check_report_security.py
 .\.venv\Scripts\python.exe scripts/check_search_ui.py
 .\.venv\Scripts\python.exe scripts/check_combined_ui.py
 ```
@@ -14,7 +16,10 @@ Run from the repository root after installing the pinned dependency:
 The unit suite covers geometry, recorder failures, service lifecycle ordering,
 OCR interpretation, card/name consistency, corrections, history reconstruction,
 SQLite updates, search/filter semantics, local API authorization and evidence
-path restrictions. Inputs are synthetic or mocked; no player dataset is bundled.
+path restrictions, runtime integrity and installer checks. Native media checks
+accept synthetic H.264/JPEG and reject disguised OpenEXR and unsupported codecs.
+A headless Edge check rejects hostile report evidence URLs and HTML injection
+while preserving valid local JPEG rendering. Inputs are synthetic or mocked; no player dataset is bundled.
 
 The search browser runner exercises six scenarios in installed headless Edge:
 search and pagination, combined filters, hand details, narrow layouts, empty
@@ -23,8 +28,8 @@ The combined-interface runner adds two window widths and verifies recording UI
 state, window discovery, and search during synthetic recording/analysis.
 Artifacts stay under ignored `.dev/` directories.
 
-The prepared snapshot passed 204 unit tests and all eight browser scenarios
-locally on Windows. The public CI workflow runs the unit suite and compilation
+The prepared snapshot passed 208 unit tests and all eight browser scenarios
+locally on Windows. The public CI workflow runs the unit suite, compilation and native media security regressions
 on Windows with Python 3.12. [Hosted workflow runs](https://github.com/DavyStultz/Ada-Poker/actions/workflows/tests.yml)
 show the results for each published commit.
 
