@@ -1,0 +1,2 @@
+# FFmpeg distribution used for local video capture and decoding.
+imageio-ffmpeg==0.6.0

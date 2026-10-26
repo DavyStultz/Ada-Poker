@@ -1,0 +1,33 @@
+# Environments, generated output, and local configuration
+.venv/
+__pycache__/
+*.py[cod]
+.dev/
+.local/
+.env
+.env.*
+.vscode/
+Thumbs.db
+Desktop.ini
+*.lnk
+
+# Recordings, evidence, OCR caches, and player databases stay local
+recordings/
+sessions/
+analysis/
+frames/
+*.mkv
+*.mp4
+*.avi
+*.webm
+*.log
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+hands.json
+observations.json
+session.json
+*-cache.json
+name-corrections.json

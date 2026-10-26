@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ada Poker</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+  <script src="/recording.js" defer></script>
+</head>
+<body>
+  <header class="app-bar">
+    <button id="home" class="brand" aria-label="Ada Poker home"><span class="brand-mark">a<span>♠</span></span><span>ada<span class="brand-secondary">poker</span></span></button>
+    <div class="app-bar-right"><span id="example-label" class="example-label" hidden>Design preview · example hands</span><span class="local-label"><i></i> Local library</span></div>
+  </header>
+  <div id="recording-toolbar" class="recording-toolbar" hidden>
+    <button id="recording-toggle" class="button" aria-expanded="false" aria-controls="recording-panel">Record a session <span aria-hidden="true">⌄</span></button>
+    <div class="recording-live"><span id="recording-status">Ready to record</span><span id="recording-timer">00:00:00</span><button id="recording-quick-stop" class="button small" hidden>Stop &amp; save</button></div>
+  </div>
+  <main>
+      <div id="search-heading" class="search-heading"><div class="eyebrow">PLAYER HISTORY</div><h1>Find a player.</h1><p>Explore every hand you've played together.</p></div>
+      <form id="search-form" class="search-form" autocomplete="off">
+        <div class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg><input id="query" type="search" aria-label="Search player username" placeholder="Search a player's username" spellcheck="false"><button type="submit" id="search-submit">Search <span>↵</span></button></div>
+        <div id="suggestions" class="suggestions" aria-label="Matching players" hidden></div>
+      </form>
+      <p id="search-message" class="search-message" aria-live="polite"></p>
+    <section id="recording-panel" class="recording-panel" hidden aria-label="Session recording">
+      <div class="recording-heading"><div><div class="eyebrow">SESSION RECORDER</div><h2>Capture your table.</h2></div><button id="recording-collapse" class="text-button">Collapse</button></div>
+      <div class="recording-layout">
+        <div class="recording-preview"><img id="recording-preview-image" alt="Selected window preview" hidden><p id="recording-preview-note">Choose a table window to preview.</p></div>
+        <div class="recording-controls">
+          <label>Table window<div class="recording-input-row"><select id="recording-window"><option value="">Choose a window</option></select><button id="recording-refresh" class="button small">Refresh</button></div></label>
+          <p class="muted">ClubGG tables appear under their table names. This list updates automatically. Choose any size and position before Start; keep that size during recording.</p>
+          <label>Capture method<select id="recording-mode"><option value="visible_window">Visible table (recommended for ClubGG)</option><option value="window_client">Direct window</option></select></label>
+          <p id="recording-mode-note" class="muted">Records the selected table's visible screen area. Keep it uncovered and in place; overlapping windows will appear in the video. No manual area selection.</p>
+          <label>Save recordings to<div class="recording-input-row"><input id="recording-folder" type="text" spellcheck="false" aria-label="Recordings folder"><button id="recording-browse" class="button small">Browse</button></div></label>
+          <label>Stop automatically after<select id="recording-duration"><option value="60">1 minute (test)</option><option value="600">10 minutes</option><option value="3600">1 hour</option><option value="7200">2 hours</option><option value="10800" selected>3 hours</option></select></label>
+          <div class="recording-actions"><button id="recording-start" class="button primary" disabled>Start recording</button><button id="recording-stop" class="button" disabled>Stop &amp; save</button></div>
+          <p class="muted">Analysis starts after the recording is saved. You can search and browse hands while recording.</p>
+        </div>
+      </div>
+      <div class="recording-message-row"><p id="recording-message" aria-live="polite">Ready to record</p><div><button id="recording-retry" class="text-button" hidden>Retry analysis</button><button id="recording-open" class="text-button" hidden>Open saved folder</button></div></div>
+      <p id="recording-warning" class="recording-warning" hidden></p>
+      <p id="recording-error" class="recording-warning" role="alert" hidden></p>
+    </section>
+    <section id="search-view">
+      <section id="results" hidden>
+        <div class="results-toolbar"><div><div class="eyebrow">HANDS TOGETHER</div><h2 id="player-name"></h2><p id="result-count" class="muted"></p></div><button id="filter-toggle" class="button filter-toggle" aria-expanded="false" aria-controls="filters"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6M16 14v6"></path></svg>Filters <span id="filter-count" class="filter-count" hidden></span></button></div>
+        <form id="filters" class="filters" hidden>
+          <div class="filter-heading"><span>Find a specific line of play</span><button type="button" id="reset-filters" class="text-button">Clear filters</button></div>
+          <div class="filter-fields">
+            <label>Cards<select name="cards"><option value="">All hands</option><option value="seen">Cards revealed</option><option value="showdown">Shown at showdown</option><option value="unseen">Cards not seen</option></select></label>
+            <label>Position<select name="position"><option value="">Any position</option><option value="blinds">On the blinds</option><option value="early">Early position</option><option value="late">Late position</option></select></label>
+            <label>Street<select name="street"><option value="preflop">Preflop</option><option value="flop">Flop</option><option value="turn">Turn</option><option value="river">River</option></select></label>
+            <label>Action<select name="action"><option value="">Any action</option><option value="raise">Raiser</option><option value="reraise">Reraiser</option><option value="call">Call</option><option value="bet">Bet</option><option value="check">Check</option><option value="fold">Fold</option><option value="all_in">All-in</option></select></label>
+            <label>Raise order<select name="order"><option value="">Any order</option><option value="1">First raise</option><option value="2">Second raise</option><option value="3">Third raise</option></select></label>
+            <label>Size <span class="muted">BB</span><input name="size" type="number" min="0" step="any" placeholder="Any size" aria-label="Action size in big blinds"></label>
+          </div>
+          <div class="filter-footer"><span class="muted">Raise sizes are the total raised to. Raise order restarts each street.</span><button type="submit" class="button primary">Apply filters</button></div>
+        </form>
+        <div id="active-filters" class="active-filters"></div>
+        <div class="list-caption"><span id="list-label">Recorded hands</span><span>Revealed cards first <span class="sort-arrow">↓</span></span></div>
+        <div class="hands-wrap"><table class="hand-grid"><thead><tr><th>PLAYER'S CARDS</th><th>PREFLOP</th><th>FLOP</th><th>TURN</th><th>RIVER</th><th aria-label="Open hand"></th></tr></thead><tbody id="hand-rows"></tbody></table></div>
+        <div id="empty-results" class="empty-results" hidden><div class="empty-symbol">⌕</div><h3>No hands match these filters.</h3><p>Try a different position, action, or raise size.</p><button id="empty-reset" class="button">Clear filters</button></div>
+        <nav class="pagination" aria-label="Hand pages"><span id="page-label"></span><div><button id="previous-page" class="button small">← Previous</button><button id="next-page" class="button small">Next →</button></div></nav>
+      </section>
+      <div id="landing" class="landing"><div class="landing-art"><span class="ghost-card">A<span>♠</span></span><span class="ghost-card second">K<span>♠</span></span></div><p>Your next read starts with a name.</p><span>Search to explore the hands you've played together.</span></div>
+    </section>
+    <section id="detail-view" hidden>
+      <div class="detail-header"><div><div class="eyebrow">HAND HISTORY</div><h1 id="detail-title">Recorded hand</h1><p id="detail-subtitle" class="muted"></p></div><button id="detail-back" class="button">Back to hands <span>↗</span></button></div>
+      <section class="table-stage" aria-label="Table and visible cards"><div class="poker-table"><div class="felt-line"></div><div class="table-center"><div class="table-wordmark">ada poker</div><div id="board" class="board"></div><div id="pot" class="pot" hidden></div></div></div><div id="table-seats"></div></section>
+      <div class="section-heading"><h2>The action</h2><span id="action-caption" class="muted"></span></div>
+      <div id="street-columns" class="street-columns"></div>
+      <div id="other-actions" class="other-actions" hidden></div>
+    </section>
+    <section id="evidence-view" hidden>
+      <button id="evidence-back" class="text-button evidence-back">← Back to hand</button><div class="evidence-heading"><div class="eyebrow">STREET SCREENSHOT</div><h1 id="evidence-title"></h1><p>Check the recorded action for this street.</p></div><div id="evidence-image-wrap" class="evidence-image-wrap"><img id="evidence-image" alt="Recorded action on the selected street" hidden><p id="evidence-message" class="muted"></p></div><div class="evidence-pagination"><button id="evidence-previous" class="button small">← Previous image</button><span id="evidence-count" class="muted"></span><button id="evidence-next" class="button small">Next image →</button></div>
+    </section>
+    <div id="error" class="error" role="alert" hidden></div>
+  </main>
+  <footer class="app-footer"><span>ADA POKER</span><span>One player. Every street.</span></footer>
+</body>
+</html>
