@@ -19,6 +19,11 @@ available output; the program does not bypass application capture restrictions.
 Closing the app saves an active recording and allows pending analysis to finish
 in the background. Capture and OCR work run outside the HTTP request thread.
 
+`media.py` resolves only the checksum-verified local FFmpeg runtime. Decode paths
+accept recorder-compatible Matroska/H.264 and generated JPEG evidence. Report
+images are restricted to generated local JPEG paths. Setup is the only step
+that downloads the runtime; see [security](../SECURITY.md).
+
 ## Recognition and reconstruction
 
 `analyze.py` decodes recorded segments and samples approximately five frames per

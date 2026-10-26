@@ -41,7 +41,7 @@ From the repository root in PowerShell:
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --no-deps --only-binary=:all: -r requirements.txt
+.\.venv\Scripts\python.exe scripts/setup_ffmpeg.py
 .\.venv\Scripts\python.exe scripts/demo.py
 ```
 
@@ -70,8 +70,9 @@ flowchart LR
 ```
 
 The Python standard-library HTTP service binds to loopback and gives each launch
-an API token. The browser UI uses plain HTML, CSS, and JavaScript. The only
-third-party Python runtime dependency is `imageio-ffmpeg`, which bundles FFmpeg.
+an API token. The browser UI uses plain HTML, CSS, and JavaScript. There are no
+third-party Python runtime packages. Setup installs checksum-pinned FFmpeg 9.0.2
+locally; the application verifies its executable before use. See [security](SECURITY.md).
 
 Engineering choices include repeatable session imports without duplicate hands,
 versioned recognition caches, capture interruption handling, and separate
@@ -87,10 +88,10 @@ action reconstruction, bomb pots, side pots, straddles, and chip accounting stil
 need further work and independent footage validation. Three-hour recording
 reliability has not been established.
 
-The prepared snapshot passed **204 unit tests**, **six search browser scenarios**,
+The prepared snapshot passed **208 unit tests**, **six search browser scenarios**,
 and **two combined-interface browser scenarios** locally on Windows. These checks
 exercise behavior with synthetic inputs; they do not measure real-world poker
-recognition accuracy. The Windows CI workflow repeats unit tests and compilation
+recognition accuracy. The Windows CI workflow repeats unit tests, compilation and native media security checks
 on pushes and pull requests; the badge above links to the hosted results.
 
 ```powershell

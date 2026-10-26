@@ -7,11 +7,15 @@ Windows OCR language pack for recognition. Install from the repository root:
 
 ```powershell
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install --no-deps --only-binary=:all: -r requirements.txt
+.\.venv\Scripts\python.exe scripts/setup_ffmpeg.py
 ```
 
 The commands do not require activating the environment or changing PowerShell
-execution policy. `setup.ps1` and `start-recorder.ps1` are optional convenience
+execution policy. Setup downloads a pinned FFmpeg archive and verifies its SHA-256
+and executable hash before use. The runtime and its third-party license stay in
+`.local/ffmpeg/`; no system-wide installation is needed. Subsequent recording and
+analysis work offline. Only recorder-compatible Matroska/H.264 video and generated
+JPEG evidence are supported. `setup.ps1` and `start-recorder.ps1` are optional convenience
 scripts on systems that permit PowerShell scripts.
 
 ## Synthetic demonstration

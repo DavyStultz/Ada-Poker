@@ -8,7 +8,6 @@ import json
 import os
 from pathlib import Path
 import queue
-import shutil
 import threading
 import time
 import tkinter as tk
@@ -16,6 +15,7 @@ from tkinter import filedialog, messagebox, ttk
 
 from . import windows
 from .recorder import CaptureRegion, Recorder, RecordingOptions
+from .media import get_ffmpeg
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SETTINGS_PATH = PROJECT_ROOT / ".local" / "settings.json"
@@ -23,14 +23,7 @@ ACTIVE_STATES = {"starting", "recording", "stopping"}
 
 
 def find_encoder() -> str:
-    try:
-        import imageio_ffmpeg
-        return imageio_ffmpeg.get_ffmpeg_exe()
-    except (ImportError, RuntimeError):
-        candidate = shutil.which("ffmpeg")
-        if candidate:
-            return candidate
-        raise RuntimeError("The recording component is missing. Run setup.ps1 in the project folder.")
+    return get_ffmpeg()
 
 
 def clock_text(seconds: float) -> str:

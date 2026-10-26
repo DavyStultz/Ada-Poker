@@ -15,12 +15,13 @@ import tempfile
 import threading
 
 from .reading import OBSERVER_LAYOUT
+from .media import jpeg_input_options
 
 WIDTH, HEIGHT = 1418, 1024
 
 
 def image_pixels(path, ffmpeg):
-    result = subprocess.run([ffmpeg,"-v","error","-nostdin","-i",str(path),
+    result = subprocess.run([ffmpeg,"-v","error","-nostdin",*jpeg_input_options(),"-i",str(Path(path).resolve()),
         "-vf",f"scale={WIDTH}:{HEIGHT}","-frames:v","1","-f","rawvideo","-pix_fmt","rgb24","-"],
         capture_output=True,timeout=30,creationflags=subprocess.CREATE_NO_WINDOW)
     if result.returncode or len(result.stdout) != WIDTH*HEIGHT*3:
@@ -235,6 +236,7 @@ def image_sequence(paths, ffmpeg):
         return
     with tempfile.TemporaryFile() as errors:
         process=subprocess.Popen([ffmpeg,'-hide_banner','-loglevel','error','-threads','1',
+            '-protocol_whitelist','pipe','-codec_whitelist','mjpeg',
             '-f','image2pipe','-framerate','5','-vcodec','mjpeg','-i','pipe:0',
             '-vf',f'scale={WIDTH}:{HEIGHT}','-threads','1','-f','rawvideo','-pix_fmt','rgb24','pipe:1'],
             stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=errors,creationflags=subprocess.CREATE_NO_WINDOW)
